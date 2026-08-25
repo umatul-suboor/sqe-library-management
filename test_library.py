@@ -42,3 +42,15 @@ def test_return_book():
 
     assert result is True
     assert book.available is True
+
+def test_same_book_cannot_be_issued_twice():
+    library = Library()
+    book = Book("B005", "Database Systems", 1)
+
+    library.add_book(book)
+
+    first_issue = library.issue_book("B005", "Ali")
+    second_issue = library.issue_book("B005", "Ahmed")
+
+    assert first_issue is True
+    assert second_issue is False
