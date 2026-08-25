@@ -1,11 +1,13 @@
 class Book:
-    def __init__(self, book_id, title, quantity):
-        self.book_id = book_id
-        self.title = title
-        self.quantity = quantity
-        self.available = True
-        self.issued_to = None
+  def __init__(self, book_id, title, quantity):
+    if quantity < 0:
+        raise ValueError("Book quantity cannot be negative")
 
+    self.book_id = book_id
+    self.title = title
+    self.quantity = quantity
+    self.available = True
+    self.issued_to = None
 
 class Library:
     def __init__(self):
