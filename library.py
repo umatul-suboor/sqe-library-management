@@ -38,3 +38,15 @@ class Library:
                 book.issued_to = None
                 return True
         return False
+
+
+def test_returned_book_becomes_available():
+    library = Library()
+    book = Book("B006", "Operating Systems", 1)
+
+    library.add_book(book)
+
+    library.issue_book("B006", "Ali")
+    library.return_book("B006")
+
+    assert book.available is True
