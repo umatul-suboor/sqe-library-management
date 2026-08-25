@@ -54,3 +54,14 @@ def test_same_book_cannot_be_issued_twice():
 
     assert first_issue is True
     assert second_issue is False
+
+
+
+import pytest
+
+
+def test_negative_quantity_is_rejected():
+    library = Library()
+
+    with pytest.raises(ValueError):
+        Book("B007", "Python Programming", -5)
