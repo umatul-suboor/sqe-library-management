@@ -20,13 +20,16 @@ class Library:
                 return book
         return None
 
-    def issue_book(self, book_id, student):
-        for book in self.books:
-            if book.book_id == book_id:
-                book.available = False
-                book.issued_to = student
-                return True
-        return False
+ def issue_book(self, book_id, student):
+    for book in self.books:
+        if book.book_id == book_id:
+            if not book.available:
+                return False
+
+            book.available = False
+            book.issued_to = student
+            return True
+    return False
 
     def return_book(self, book_id):
         for book in self.books:
