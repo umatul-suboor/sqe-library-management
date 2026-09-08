@@ -124,3 +124,19 @@ class Roster:
 
         self.members.append(student)
 
+def validate_name(name):
+    if not isinstance(name, str):
+        raise ValueError("Name must be a string")
+
+    if len(name) == 0:
+        raise ValueError("Name cannot be empty")
+
+    if len(name) > 50:
+        raise ValueError("Name cannot exceed 50 characters")
+
+    for char in name:
+        if not (char.isalpha() or char in " -"):
+            raise ValueError("Name can contain only letters, spaces, and hyphens")
+
+    return True
+
