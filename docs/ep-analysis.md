@@ -40,4 +40,8 @@ An ISBN must contain exactly 13 numeric digits.
 
 The valid class contains ISBN values with exactly 13 numeric digits.
 
+<<<<<<< HEAD
 The invalid classes represent different types of invalid input, including empty input, values that are too short or too long, letters, and symbols.
+=======
+The invalid classes represent different types of invalid input, including empty input, values that are too short or too long, letters, and symbols.
+>>>>>>> 94c4518c30fc306007a7aa855e1843ff79970cff
