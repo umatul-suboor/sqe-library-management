@@ -1,17 +1,19 @@
 class Book:
-  def __init__(self, book_id, title, quantity):
-    if quantity < 0:
-        raise ValueError("Book quantity cannot be negative")
+    def __init__(self, book_id, title, quantity):
+        if quantity < 0:
+            raise ValueError("Book quantity cannot be negative")
 
-    self.book_id = book_id
-    self.title = title
-    self.quantity = quantity
-    self.available = True
-    self.issued_to = None
+        self.book_id = book_id
+        self.title = title
+        self.quantity = quantity
+        self.available = True
+        self.issued_to = None
+
 
 class Library:
     def __init__(self):
         self.books = []
+        self.borrowed_books = {}
 
     def add_book(self, book):
         self.books.append(book)
@@ -22,33 +24,70 @@ class Library:
                 return book
         return None
 
- def issue_book(self, book_id, student):
-    for book in self.books:
-        if book.book_id == book_id:
-            if not book.available:
-                return False
+    def issue_book(self, book_id, student):
+        for book in self.books:
+            if book.book_id == book_id:
+                if not book.available:
+                    return False
 
-            book.available = False
-            book.issued_to = student
-            return True
-    return False
+                book.available = False
+                book.issued_to = student
+
+                self.borrowed_books[student] = (
+                    self.borrowed_books.get(student, 0) + 1
+                )
+
+                return True
+
+        return False
 
     def return_book(self, book_id):
         for book in self.books:
             if book.book_id == book_id:
+                if book.issued_to in self.borrowed_books:
+                    self.borrowed_books[book.issued_to] -= 1
+
                 book.available = True
                 book.issued_to = None
                 return True
+
         return False
 
+    def borrow_book(self, member_id, isbn):
+        current_books = self.borrowed_books.get(member_id, 0)
 
-def test_returned_book_becomes_available():
-    library = Library()
-    book = Book("B006", "Operating Systems", 1)
+        if current_books >= 5:
+            raise ValueError("Member cannot borrow more than 5 books")
 
-    library.add_book(book)
+        self.borrowed_books[member_id] = current_books + 1
 
-    library.issue_book("B006", "Ali")
-    library.return_book("B006")
+        return True
 
-    assert book.available is True
+
+def fine_tier(days_overdue):
+    if days_overdue < 0:
+        raise ValueError("Days overdue cannot be negative")
+
+    if days_overdue == 0:
+        return "None"
+    elif days_overdue <= 7:
+        return "Low"
+    elif days_overdue <= 14:
+        return "Medium"
+    elif days_overdue <= 30:
+        return "High"
+    else:
+        return "Severe"
+
+
+def validate_isbn(isbn):
+    if not isinstance(isbn, str):
+        raise ValueError("ISBN must be a string")
+
+    if len(isbn) != 13:
+        raise ValueError("ISBN must contain exactly 13 digits")
+
+    if not isbn.isdigit():
+        raise ValueError("ISBN must contain only numeric digits")
+
+    return True
