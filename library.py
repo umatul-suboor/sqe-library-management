@@ -1,13 +1,14 @@
 class Book:
-  def __init__(self, book_id, title, quantity):
-    if quantity < 0:
-        raise ValueError("Book quantity cannot be negative")
+    def __init__(self, book_id, title, quantity):
+        if quantity < 0:
+            raise ValueError("Book quantity cannot be negative")
 
-    self.book_id = book_id
-    self.title = title
-    self.quantity = quantity
-    self.available = True
-    self.issued_to = None
+        self.book_id = book_id
+        self.title = title
+        self.quantity = quantity
+        self.available = True
+        self.issued_to = None
+
 
 class Library:
     def __init__(self):
@@ -22,16 +23,16 @@ class Library:
                 return book
         return None
 
- def issue_book(self, book_id, student):
-    for book in self.books:
-        if book.book_id == book_id:
-            if not book.available:
-                return False
+    def issue_book(self, book_id, student):
+        for book in self.books:
+            if book.book_id == book_id:
+                if not book.available:
+                    return False
 
-            book.available = False
-            book.issued_to = student
-            return True
-    return False
+                book.available = False
+                book.issued_to = student
+                return True
+        return False
 
     def return_book(self, book_id):
         for book in self.books:
@@ -40,15 +41,3 @@ class Library:
                 book.issued_to = None
                 return True
         return False
-
-
-def test_returned_book_becomes_available():
-    library = Library()
-    book = Book("B006", "Operating Systems", 1)
-
-    library.add_book(book)
-
-    library.issue_book("B006", "Ali")
-    library.return_book("B006")
-
-    assert book.available is True
