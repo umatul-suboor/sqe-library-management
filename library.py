@@ -107,3 +107,20 @@ def fine_tier(days_overdue):
     else:
         return "Severe"
 
+
+class Member:
+    def __init__(self, member_id):
+        self.member_id = member_id
+        self.borrowed_books = []
+
+
+class Roster:
+    def __init__(self):
+        self.members = []
+
+    def add_student(self, student):
+        if len(student.borrowed_books) < 1 or len(student.borrowed_books) > 6:
+            raise ValueError("A member must have between 1 and 6 borrowed books")
+
+        self.members.append(student)
+
