@@ -32,9 +32,6 @@ class Library:
 
                 book.available = False
                 book.issued_to = student
-<<<<<<< HEAD
-                return True
-=======
 
                 self.borrowed_books[student] = (
                     self.borrowed_books.get(student, 0) + 1
@@ -42,7 +39,6 @@ class Library:
 
                 return True
 
->>>>>>> 94c4518c30fc306007a7aa855e1843ff79970cff
         return False
 
     def return_book(self, book_id):
@@ -54,16 +50,13 @@ class Library:
                 book.available = True
                 book.issued_to = None
                 return True
-<<<<<<< HEAD
-        return False
-=======
 
         return False
 
     def borrow_book(self, member_id, isbn):
         current_books = self.borrowed_books.get(member_id, 0)
 
-        if current_books >= 5:
+        if current_books >= 6:
             raise ValueError("Member cannot borrow more than 5 books")
 
         self.borrowed_books[member_id] = current_books + 1
@@ -73,10 +66,10 @@ class Library:
 
 def fine_tier(days_overdue):
     if days_overdue < 0:
-        raise ValueError("Days overdue cannot be negative")
+        return "Invalid"
 
     if days_overdue == 0:
-        return "None"
+        return "No Fine"
     elif days_overdue <= 7:
         return "Low"
     elif days_overdue <= 14:
@@ -84,7 +77,7 @@ def fine_tier(days_overdue):
     elif days_overdue <= 30:
         return "High"
     else:
-        return "Severe"
+        return "Overdue"
 
 
 def validate_isbn(isbn):
@@ -98,53 +91,3 @@ def validate_isbn(isbn):
         raise ValueError("ISBN must contain only numeric digits")
 
     return True
-
-def fine_tier(days_overdue):
-    if days_overdue < 0:
-        raise ValueError("Days overdue cannot be negative")
-
-    if days_overdue == 0:
-        return "None"
-    elif days_overdue <= 7:
-        return "Low"
-    elif days_overdue <= 14:
-        return "Medium"
-    elif days_overdue <= 30:
-        return "High"
-    else:
-        return "Severe"
-
-
-class Member:
-    def __init__(self, member_id):
-        self.member_id = member_id
-        self.borrowed_books = []
-
-
-class Roster:
-    def __init__(self):
-        self.members = []
-
-    def add_student(self, student):
-        if len(student.borrowed_books) < 1 or len(student.borrowed_books) > 6:
-            raise ValueError("A member must have between 1 and 6 borrowed books")
-
-        self.members.append(student)
-
-def validate_name(name):
-    if not isinstance(name, str):
-        raise ValueError("Name must be a string")
-
-    if len(name) == 0:
-        raise ValueError("Name cannot be empty")
-
-    if len(name) > 50:
-        raise ValueError("Name cannot exceed 50 characters")
-
-    for char in name:
-        if not (char.isalpha() or char in " -"):
-            raise ValueError("Name can contain only letters, spaces, and hyphens")
-
-    return True
-
->>>>>>> 94c4518c30fc306007a7aa855e1843ff79970cff
