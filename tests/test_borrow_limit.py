@@ -1,14 +1,11 @@
 import pytest
-from library import Library
 
 
 @pytest.mark.parametrize('current_books,should_pass', [
     (3, True),
     (5, True),
 ])
-def test_borrow_limit_equivalence_classes(current_books, should_pass):
-    library = Library()
-
+def test_borrow_limit_equivalence_classes(library, current_books, should_pass):
     member_id = "M001"
 
     library.borrowed_books[member_id] = current_books
@@ -19,14 +16,13 @@ def test_borrow_limit_equivalence_classes(current_books, should_pass):
         with pytest.raises(ValueError):
             library.borrow_book(member_id, "ISBN001")
 
+
 @pytest.mark.parametrize('current_books,should_pass', [
     (4, True),
     (5, True),
     (6, False),
 ])
-def test_borrow_limit_boundaries(current_books, should_pass):
-    library = Library()
-
+def test_borrow_limit_boundaries(library, current_books, should_pass):
     member_id = "M001"
 
     library.borrowed_books[member_id] = current_books

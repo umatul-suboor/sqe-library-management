@@ -10,6 +10,10 @@ class Book:
         self.issued_to = None
 
 
+class LibraryIOError(Exception):
+    pass
+
+
 class Library:
     def __init__(self):
         self.books = []
@@ -17,6 +21,9 @@ class Library:
 
     def add_book(self, book):
         self.books.append(book)
+
+    def total_available_copies(self):
+        return sum(book.quantity for book in self.books)
 
     def search_book(self, title):
         for book in self.books:
@@ -43,7 +50,7 @@ class Library:
 
     def return_book(self, book_id):
         for book in self.books:
-            if book.book_id == book_id:
+            if book.book_id == book.book_id:
                 if book.issued_to in self.borrowed_books:
                     self.borrowed_books[book.issued_to] -= 1
 
@@ -62,6 +69,18 @@ class Library:
         self.borrowed_books[member_id] = current_books + 1
 
         return True
+
+    def export_catalog(self, path):
+        try:
+            with open(path, "w", encoding="utf-8") as file:
+                for book in self.books:
+                    file.write(
+                        f"{book.book_id},{book.title},{book.quantity}\n"
+                    )
+        except OSError as e:
+            raise LibraryIOError(
+                f"Unable to export catalog: {e}"
+            ) from e
 
 
 def fine_tier(days_overdue):
