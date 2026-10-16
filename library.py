@@ -110,3 +110,6 @@ def validate_isbn(isbn):
         raise ValueError("ISBN must contain only numeric digits")
 
     return True
+
+def rank_books_by_popularity(library):
+    return []
