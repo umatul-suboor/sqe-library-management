@@ -119,6 +119,8 @@ def rank_books_by_popularity(library):
     """Return books by borrow count, highest first."""
     return sorted(
         library.books,
-        key=lambda book: getattr(book, "borrow_count", 0),
-        reverse=True,
+        key=lambda book: (
+            -getattr(book, "borrow_count", 0),
+            book.title,
+        ),
     )
