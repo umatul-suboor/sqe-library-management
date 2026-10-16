@@ -115,12 +115,13 @@ def validate_isbn(isbn):
 
     return True
 
+
 def rank_books_by_popularity(library):
-    """Return books by borrow count, highest first."""
+    """Return books by popularity with alphabetical tie-breaking."""
     return sorted(
         library.books,
         key=lambda book: (
             -getattr(book, "borrow_count", 0),
-            book.title,
+            book.title.casefold(),
         ),
     )
