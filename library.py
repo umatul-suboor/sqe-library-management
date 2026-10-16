@@ -9,6 +9,8 @@ class Book:
         self.available = True
         self.issued_to = None
 
+        self.borrow_count = 0
+
 
 class LibraryIOError(Exception):
     pass
@@ -43,6 +45,8 @@ class Library:
                 self.borrowed_books[student] = (
                     self.borrowed_books.get(student, 0) + 1
                 )
+
+                book.borrow_count += 1
 
                 return True
 
@@ -112,4 +116,9 @@ def validate_isbn(isbn):
     return True
 
 def rank_books_by_popularity(library):
-    return []
+    """Return books by borrow count, highest first."""
+    return sorted(
+        library.books,
+        key=lambda book: getattr(book, "borrow_count", 0),
+        reverse=True,
+    )
