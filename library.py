@@ -19,12 +19,13 @@ def validate_isbn(isbn):
     if not isinstance(isbn, str):
         raise ValueError("ISBN must be a string")
 
-    isbn = isbn.replace("-", "").replace(" ", "")
+    if len(isbn) != 13:
+        raise ValueError("ISBN must contain exactly 13 digits")
 
-    if len(isbn) == 13 and isbn.isdigit():
-        return True
+    if not isbn.isdigit():
+        raise ValueError("ISBN must contain only numeric digits")
 
-    raise ValueError("Invalid ISBN")
+    return True
 
 
 class Library:
@@ -44,16 +45,20 @@ class Library:
                 return book
 
         return None
-def return_book(self, book_id):
-    for book in self.books:
-        if book.book_id == book_id:
-            if book.issued_to in self.borrowed_books:
-                self.borrowed_books[book.issued_to] -= 1
+
+    def return_book(self, book_id):
+        for book in self.books:
+            if book.book_id == book_id:
+                if book.issued_to in self.borrowed_books:
+                    self.borrowed_books[book.issued_to] -= 1
+                return True
+
+        return False
 
     def borrow_book(self, member_id, isbn):
         current_books = self.borrowed_books.get(member_id, 0)
 
-        if current_books >= 6:
+        if current_books >= 5:
             raise ValueError("Member cannot borrow more than 5 books")
 
         self.borrowed_books[member_id] = current_books + 1
