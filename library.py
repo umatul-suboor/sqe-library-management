@@ -31,22 +31,19 @@ class Library:
                 return book
         return None
 
-    def issue_book(self, book_id, student):
-        for book in self.books:
-            if book.book_id == book_id:
-                if not book.available:
-                    return False
+   
+def return_book(self, book_id):
+    for book in self.books:
+        if book.book_id == book_id:
+            if book.issued_to in self.borrowed_books:
+                self.borrowed_books[book.issued_to] -= 1
 
-                book.available = False
-                book.issued_to = student
+            book.available = True
+            book.issued_to = None
+            return True
 
-                self.borrowed_books[student] = (
-                    self.borrowed_books.get(student, 0) + 1
-                )
+    return False
 
-                return True
-
-        return False
 
     def return_book(self, book_id):
         for book in self.books:
