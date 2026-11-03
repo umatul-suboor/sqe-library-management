@@ -44,20 +44,11 @@ class Library:
                 return book
 
         return None
-
-    def return_book(self, book_id):
-        for book in self.books:
-            if book.book_id == book_id:
-
-                if book.issued_to in self.borrowed_books:
-                    self.borrowed_books[book.issued_to] -= 1
-
-                book.available = True
-                book.issued_to = None
-
-                return True
-
-        return False
+def return_book(self, book_id):
+    for book in self.books:
+        if book.book_id == book_id:
+            if book.issued_to in self.borrowed_books:
+                self.borrowed_books[book.issued_to] -= 1
 
     def borrow_book(self, member_id, isbn):
         current_books = self.borrowed_books.get(member_id, 0)
