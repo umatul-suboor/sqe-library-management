@@ -1,3 +1,4 @@
+
 class Book:
     def __init__(self, book_id, title, quantity):
         if quantity < 0:
@@ -12,6 +13,19 @@ class Book:
 
 class LibraryIOError(Exception):
     pass
+
+
+def validate_isbn(isbn):
+    if not isinstance(isbn, str):
+        raise ValueError("ISBN must be a string")
+
+    if len(isbn) != 13:
+        raise ValueError("ISBN must contain exactly 13 digits")
+
+    if not isbn.isdigit():
+        raise ValueError("ISBN must contain only numeric digits")
+
+    return True
 
 
 class Library:
@@ -29,30 +43,14 @@ class Library:
         for book in self.books:
             if book.title == title:
                 return book
+
         return None
-
-   
-def return_book(self, book_id):
-    for book in self.books:
-        if book.book_id == book_id:
-            if book.issued_to in self.borrowed_books:
-                self.borrowed_books[book.issued_to] -= 1
-
-            book.available = True
-            book.issued_to = None
-            return True
-
-    return False
-
 
     def return_book(self, book_id):
         for book in self.books:
-            if book.book_id == book.book_id:
+            if book.book_id == book_id:
                 if book.issued_to in self.borrowed_books:
                     self.borrowed_books[book.issued_to] -= 1
-
-                book.available = True
-                book.issued_to = None
                 return True
 
         return False
@@ -60,7 +58,7 @@ def return_book(self, book_id):
     def borrow_book(self, member_id, isbn):
         current_books = self.borrowed_books.get(member_id, 0)
 
-        if current_books >= 6:
+        if current_books >= 5:
             raise ValueError("Member cannot borrow more than 5 books")
 
         self.borrowed_books[member_id] = current_books + 1
@@ -74,6 +72,7 @@ def return_book(self, book_id):
                     file.write(
                         f"{book.book_id},{book.title},{book.quantity}\n"
                     )
+
         except OSError as e:
             raise LibraryIOError(
                 f"Unable to export catalog: {e}"
@@ -86,24 +85,30 @@ def fine_tier(days_overdue):
 
     if days_overdue == 0:
         return "No Fine"
+
     elif days_overdue <= 7:
         return "Low"
+
     elif days_overdue <= 14:
         return "Medium"
+
     elif days_overdue <= 30:
         return "High"
+
     else:
         return "Overdue"
 
 
-def validate_isbn(isbn):
-    if not isinstance(isbn, str):
-        raise ValueError("ISBN must be a string")
+def borrow_percentile(member, library):
+    borrowed_counts = list(library.borrowed_books.values())
 
-    if len(isbn) != 13:
-        raise ValueError("ISBN must contain exactly 13 digits")
+    total_members = len(borrowed_counts)
 
-    if not isbn.isdigit():
-        raise ValueError("ISBN must contain only numeric digits")
+    if total_members == 0:
+        return 0
 
-    return True
+    member_books = library.borrowed_books.get(member, 0)
+
+    rank_index = sorted(borrowed_counts).index(member_books)
+
+    return rank_index / total_members * 100

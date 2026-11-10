@@ -1,3 +1,4 @@
+
 import pytest
 
 
@@ -32,3 +33,14 @@ def test_isbn_length_boundaries(isbn_validator, length, expected):
     else:
         with pytest.raises(ValueError):
             isbn_validator(isbn)
+
+
+@pytest.mark.parametrize('isbn', [
+    9781234567890,
+    None,
+    True,
+    12345.67
+])
+def test_isbn_rejects_non_string_values(isbn_validator, isbn):
+    with pytest.raises(ValueError, match="ISBN must be a string"):
+        isbn_validator(isbn)
